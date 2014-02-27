@@ -138,8 +138,24 @@ void smoother_create_integral(struct smoother_integrated_ctx* ctx_int, struct sm
     for(i = 0; i < ctx->N; i++)
     {
         width = (ctx->max_value - ctx->min_value)/(ctx->N - 1);
-        max_0 = ctx->values[i-1]/ctx->weights[i-1];
-        max_1 = ctx->values[i  ]/ctx->weights[i  ];
+        
+        if(ctx->weights[i-1] == 0)
+        {
+            max_0 = 0.0f;
+        }
+        else
+        {
+            max_0 = ctx->values[i-1]/ctx->weights[i-1];
+        }
+        
+        if(ctx->weights[i] == 0)
+        {
+            max_1 = 0.0f;
+        }
+        else
+        {
+            max_1 = ctx->values[i  ]/ctx->weights[i  ];
+        }
 
         /* Zero is a special case. */
         if(i > 0)
@@ -164,13 +180,7 @@ float smoother_evaluate_integral(struct smoother_integrated_ctx* ctx_int, float 
     
     int idx_integer;
     float idx_fractional;
-    
-    float weight_0;
-    float weight_1;
-    
-    float value_0;
-    float value_1;
-    
+   
     float integral_value;
     
     /* First find where in the signal range the point lies. */
