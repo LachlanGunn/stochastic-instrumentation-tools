@@ -19,22 +19,22 @@ int main(int argc, char** argv)
         smoother_process_point(&ctx, x, x*10.0f);
     }
     
-    for(i = 1; i <= 19; i++)
+    for(i = 1; i <= 199; i++)
     {
-        x = -1.0f + i*1e-1f;
+        x = -1.0f + i*1e-2f;
         e = smoother_evaluate(&ctx, x) - x*10.0f;
         e_total += e*e;
     }
     
-    e_total /= 19.0f;
+    e_total /= 199.0f;
     
-    if(e_total < 1e-6)
+    if(e_total < 1e-4)
     {
-        printf("PASS: E[e^2] = %e < 1e-6\n", e_total);
+        printf("PASS: E[e^2] = %e < 1e-4\n", e_total);
     }
     else
     {
-        printf("FAIL: E[e^2] = %e > 1e-6\n", e_total);
+        printf("FAIL: E[e^2] = %e > 1e-4\n", e_total);
     }
     
     return 0;

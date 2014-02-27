@@ -14,22 +14,22 @@ int main(int argc, char** argv)
 
     smoother_init(&ctx);
     
-    for(i = 0; i <= 2000; i++)
+    for(i = 0; i <= 20000; i++)
     {
-        x = -1.0f + i*1e-3f;
+        x = -1.0f + i*1e-4f;
         smoother_process_point(&ctx, x, x*10.0f);
     }
     
     smoother_create_integral(&ctx_i, &ctx);
     
-    for(i = 0; i < ctx_i.N; i++)
+    for(i = 1; i <= 199; i++)
     {
-        x = -1.0f + i*(ctx_i.max_value - ctx_i.min_value)/(ctx_i.N-1);
-        e = ctx_i.values[i] - 5*(x*x-1);
+        x = -1.0f + i*1e-2f;
+        e = smoother_evaluate_integral(&ctx_i, x) - 5*(x*x-1);
         e_total += e*e;
     }
     
-    e_total /= ctx_i.N;
+    e_total /= 199;
     
     if(e_total < 1e-4)
     {

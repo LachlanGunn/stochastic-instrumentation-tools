@@ -3,6 +3,8 @@
 
 #include <stdlib.h>
 
+#define SMOOTHER_POINTS 64
+
 struct smoother_ctx
 {
     size_t N;
@@ -11,8 +13,8 @@ struct smoother_ctx
     
     /* FIXME: These should not be fixed, but we need to allocate
               them _somewhere_. */
-    float values[32];
-    float weights[32];
+    float values[SMOOTHER_POINTS];
+    float weights[SMOOTHER_POINTS];
 };
 
 struct smoother_integrated_ctx
@@ -21,7 +23,10 @@ struct smoother_integrated_ctx
     float min_value;
     float max_value;
     
-    float values[33];
+    /* Coefficients for the interpolating quadratics. */
+    float interp_c0[SMOOTHER_POINTS];
+    float interp_c1[SMOOTHER_POINTS];
+    float interp_c2[SMOOTHER_POINTS];
 };
 
 /**
@@ -60,5 +65,15 @@ extern float smoother_evaluate(struct smoother_ctx* ctx, float x);
  * @param ctx       The smoother context to integrate.
  */
 extern void smoother_create_integral(struct smoother_integrated_ctx* ctx_int, struct smoother_ctx* ctx);
+ 
+/**
+ * Evaluate the indefinite integral.
+ *
+ * @param ctx_int   The integrated smoother to evaluate.
+ * @param x         The value at which to evaluate the integral.
+ *
+ * @return The estimated indefinite integral.
+ */
+extern float smoother_evaluate_integral(struct smoother_integrated_ctx* ctx_int, float x);
  
 #endif /* __SMOOTHER_H */
