@@ -30,9 +30,17 @@ static float smoother_find_index_integral(struct smoother_integrated_ctx* ctx, f
 
 void smoother_init(struct smoother_ctx* ctx)
 {
+    int i;
+    
     ctx->N = SMOOTHER_POINTS;
-    ctx->min_value = -1.0f;
-    ctx->max_value =  1.0f;
+    ctx->min_value = 0.0f;
+    ctx->max_value = 5.0f;
+    
+    for(i = 0; i < SMOOTHER_POINTS; i++)
+    {
+        ctx->values[i] = 0.0f;
+        ctx->weights[i] = 0.0f;
+    }
 }
 
 void smoother_process_point(struct smoother_ctx* ctx, float x, float y)

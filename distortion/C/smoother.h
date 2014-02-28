@@ -3,7 +3,7 @@
 
 #include <stdlib.h>
 
-#define SMOOTHER_POINTS 64
+#define SMOOTHER_POINTS 128
 
 struct smoother_ctx
 {

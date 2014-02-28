@@ -7,13 +7,15 @@ PROJECT(DistortionCompensation)
 ENABLE_TESTING()
 
 IF(CMAKE_COMPILER_IS_GNUCC)
-    SET(CMAKE_C_FLAGS "-Wall -Werror -ansi -pedantic")
+    SET(CMAKE_C_FLAGS "-Wall -Werror -pedantic -O2")
 ENDIF()
 
 ADD_EXECUTABLE(test_smoother test_smoother.c smoother.c)
 ADD_EXECUTABLE(test_smoother_integral test_smoother_integral.c smoother.c)
 
 ADD_EXECUTABLE(test_filter test_filter.c filter.c)
+
+ADD_EXECUTABLE(test_undistorter test_undistorter.c filter.c smoother.c undistorter.c)
 
 ADD_TEST(SmootherLinearMSE test_smoother)
 SET_TESTS_PROPERTIES(SmootherLinearMSE
