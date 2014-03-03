@@ -6,10 +6,10 @@
 #include "filter.h"
 #include "smoother.h"
 
-void undistorter_init(struct undistorter_ctx* ctx, float cutoff, float fs, int recompensate_every)
+void undistorter_init(struct undistorter_ctx* ctx, float cutoff, float fs, int recompensate_every, float min, float max)
 {
     filter_biquad_init(&(ctx->filter), cutoff, fs);
-    smoother_init(&(ctx->smoother));
+    smoother_init(&(ctx->smoother), min, max);
     smoother_create_integral(&(ctx->integral), &(ctx->smoother));
     ctx->sample_count = 0;
     

@@ -11,7 +11,7 @@ int main(int argc, char** argv)
     float e;
     float e_total = 0.0f;
 
-    smoother_init(&ctx);
+    smoother_init(&ctx, -1.0f, 1.0f);
     
     for(i = 0; i <= 2000; i++)
     {
@@ -24,6 +24,8 @@ int main(int argc, char** argv)
         x = -1.0f + i*1e-2f;
         e = smoother_evaluate(&ctx, x) - x*10.0f;
         e_total += e*e;
+        
+        printf("%f -> %f\n", x, e);
     }
     
     e_total /= 199.0f;

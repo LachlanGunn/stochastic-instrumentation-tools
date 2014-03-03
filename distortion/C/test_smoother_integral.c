@@ -12,7 +12,7 @@ int main(int argc, char** argv)
     float e;
     float e_total = 0.0f;
 
-    smoother_init(&ctx);
+    smoother_init(&ctx, -1.0f, 1.0f);
     
     for(i = 0; i <= 20000; i++)
     {

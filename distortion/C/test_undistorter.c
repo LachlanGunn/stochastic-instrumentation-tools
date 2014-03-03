@@ -16,7 +16,7 @@ int main(int argc, char** argv)
     clock_t start_time;
     clock_t end_time;
    
-    undistorter_init(&ctx, 0.1, 2, 1);
+    undistorter_init(&ctx, 0.1, 2, 1, 0.0f, 5.0f);
     
     fh = fopen("C:\\tmp\\test.dat", "r");
     

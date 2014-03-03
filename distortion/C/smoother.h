@@ -33,8 +33,10 @@ struct smoother_integrated_ctx
  * Initialise the smoother.
  *
  * @param ctx   The smoother context to be initialised.
+ * @param min   The minimum value to be considered.
+ * @param max   The maximum value to be considered
  */
-extern void smoother_init(struct smoother_ctx* ctx);
+extern void smoother_init(struct smoother_ctx* ctx, float min, float max);
 
 /**
  * Process a point.

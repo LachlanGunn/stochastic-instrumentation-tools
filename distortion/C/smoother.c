@@ -28,13 +28,13 @@ static float smoother_find_index_integral(struct smoother_integrated_ctx* ctx, f
     return (x - ctx->min_value)/(ctx->max_value - ctx->min_value)*(ctx->N-1.0f);
 }
 
-void smoother_init(struct smoother_ctx* ctx)
+void smoother_init(struct smoother_ctx* ctx, float min, float max)
 {
     int i;
     
     ctx->N = SMOOTHER_POINTS;
-    ctx->min_value = 0.0f;
-    ctx->max_value = 5.0f;
+    ctx->min_value = min;
+    ctx->max_value = max;
     
     for(i = 0; i < SMOOTHER_POINTS; i++)
     {

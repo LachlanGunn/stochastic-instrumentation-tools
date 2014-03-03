@@ -36,8 +36,10 @@ struct undistorter_ctx
  * @param   cutoff              The cutoff frequency for the signal/noise filters.
  * @param   fs                  The sampling rate of the system.
  * @param   recompensate_every  The number of blocks between each recompensation.
+ * @param   min                 The minimum value of the input range.
+ * @param   max                 The maximum value of the input range.
  */
-extern void undistorter_init(struct undistorter_ctx* ctx, float cutoff, float fs, int recompensate_every);
+extern void undistorter_init(struct undistorter_ctx* ctx, float cutoff, float fs, int recompensate_every, float min, float max);
 
 /**
  * Process a sample.
