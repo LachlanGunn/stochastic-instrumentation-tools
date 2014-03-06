@@ -53,14 +53,14 @@ int main(int argc, char** argv)
     }
     
     start_time = clock();
-    for(i = 0; i < sample_count; i++)
+    for(i = 250000; i < sample_count; i++)
     {
         undistorter_process_sample(&ctx, input_samples[i], &input_samples[i]);
     }
     end_time = clock();
     printf("Elapsed time: %f\n", ((float)(end_time-start_time))/CLOCKS_PER_SEC);
     
-    for(i = 0; i < sample_count; i++)
+    for(i = 250000; i < sample_count; i++)
     {
         fprintf(fh_out, "%f\n", input_samples[i]);
     }
