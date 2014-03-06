@@ -82,9 +82,7 @@ char undistorter_process_sample(struct undistorter_ctx* ctx, float x, float* y)
         
     }
     
-    //*y = x;
     *y = ctx->scale*(smoother_evaluate_integral(&(ctx->integral), x)+ctx->offset);
-    //*y = smoother_evaluate_integral(&(ctx->integral), x);
         
     return 1;
 }
