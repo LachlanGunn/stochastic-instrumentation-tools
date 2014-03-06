@@ -1,4 +1,5 @@
 #include <stdlib.h>
+#include <math.h>
 
 #include "smoother.h"
 
@@ -28,13 +29,15 @@ static float smoother_find_index_integral(struct smoother_integrated_ctx* ctx, f
     return (x - ctx->min_value)/(ctx->max_value - ctx->min_value)*(ctx->N-1.0f);
 }
 
-void smoother_init(struct smoother_ctx* ctx, float min, float max)
+void smoother_init(struct smoother_ctx* ctx, float min, float max, float time_constant)
 {
     int i;
     
     ctx->N = SMOOTHER_POINTS;
     ctx->min_value = min;
     ctx->max_value = max;
+    
+    ctx->decay_constant = expf(1.0f/time_constant);
     
     for(i = 0; i < SMOOTHER_POINTS; i++)
     {
@@ -76,9 +79,13 @@ void smoother_process_point(struct smoother_ctx* ctx, float x, float y)
     weight_1 =     idx_fractional;
     
     /* Add to the weighted average. */
+    ctx->weights[idx_integer] *= ctx->decay_constant;
+    ctx->values[idx_integer] *= ctx->decay_constant;
     ctx->weights[idx_integer] += weight_0;
     ctx->values[idx_integer] += weight_0*y;
     
+    ctx->weights[idx_integer+1] *= ctx->decay_constant;
+    ctx->values[idx_integer+1] *= ctx->decay_constant;
     ctx->weights[idx_integer+1] += weight_1;
     ctx->values[idx_integer+1] += weight_1*y;
 }
@@ -169,7 +176,7 @@ void smoother_create_integral(struct smoother_integrated_ctx* ctx_int, struct sm
         if(i > 0)
         {
             ctx_int->interp_c0[i] = ctx_int->interp_c0[i-1] +
-                0.5*width*(max_0 + max_1);
+                0.5f*width*(max_0 + max_1);
         }
         
         /*
@@ -194,13 +201,14 @@ float smoother_evaluate_integral(struct smoother_integrated_ctx* ctx_int, float 
     /* First find where in the signal range the point lies. */
     idx_f = smoother_find_index_integral(ctx_int, x);
     
+    
     /* Check for out-of-range. */
     if(idx_f < 0.0f)
     {
         idx_integer = 0;
         idx_fractional = 0.0f;
     }
-    else if(idx_f > ctx_int->N)
+    else if(idx_f >= ctx_int->N)
     {        
         idx_integer = ctx_int->N-1;
         idx_fractional = 1.0f;
@@ -210,9 +218,10 @@ float smoother_evaluate_integral(struct smoother_integrated_ctx* ctx_int, float 
         idx_integer = (int)idx_f;
         idx_fractional = idx_f - (float)idx_integer;
     }
-    
+        
     /* Now evaluate the integral.  First the "whole" part. */
     integral_value = ctx_int->interp_c0[idx_integer];
+
     
     /*
      * We have computed coefficients for the quadratics

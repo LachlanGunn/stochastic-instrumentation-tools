@@ -11,6 +11,8 @@ struct smoother_ctx
     float min_value;
     float max_value;
     
+    float decay_constant;
+    
     /* FIXME: These should not be fixed, but we need to allocate
               them _somewhere_. */
     float values[SMOOTHER_POINTS];
@@ -32,11 +34,12 @@ struct smoother_integrated_ctx
 /**
  * Initialise the smoother.
  *
- * @param ctx   The smoother context to be initialised.
- * @param min   The minimum value to be considered.
- * @param max   The maximum value to be considered
+ * @param ctx               The smoother context to be initialised.
+ * @param min               The minimum value to be considered.
+ * @param max               The maximum value to be considered
+ * @param time_constant     The time constant of the smoother.
  */
-extern void smoother_init(struct smoother_ctx* ctx, float min, float max);
+extern void smoother_init(struct smoother_ctx* ctx, float min, float max, float time_constant);
 
 /**
  * Process a point.

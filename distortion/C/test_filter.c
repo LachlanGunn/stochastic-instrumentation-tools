@@ -24,6 +24,10 @@ int main(int argc, char** argv)
     ctx.delays[1] = 0.0f;
     
     filter_biquad_init(&ctx, 0.2f, 2.0f);
+    
+    printf("a = [ %f %f %f ], b = [ %f %f %f]\n",
+            ctx.a[0], ctx.a[1], ctx.a[2],
+            ctx.b[0], ctx.b[1], ctx.b[2]);
         
     /* |H(0.1)|^2 = 0.05344 */
     for(i = 0; i < N; i++)

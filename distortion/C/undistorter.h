@@ -4,7 +4,7 @@
 #include "filter.h"
 #include "smoother.h"
 
-#define BLOCK_SIZE 50
+#define BLOCK_SIZE 4
 
 struct undistorter_ctx
 {
@@ -38,8 +38,9 @@ struct undistorter_ctx
  * @param   recompensate_every  The number of blocks between each recompensation.
  * @param   min                 The minimum value of the input range.
  * @param   max                 The maximum value of the input range.
+ * @param   time_constant       The time constant for the distortion representation.
  */
-extern void undistorter_init(struct undistorter_ctx* ctx, float cutoff, float fs, int recompensate_every, float min, float max);
+extern void undistorter_init(struct undistorter_ctx* ctx, float cutoff, float fs, int recompensate_every, float min, float max, float time_constant);
 
 /**
  * Process a sample.
