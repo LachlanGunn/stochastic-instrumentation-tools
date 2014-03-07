@@ -52,7 +52,7 @@ char undistorter_process_sample(struct undistorter_ctx* ctx, float x, float* y)
         float sum_noise_square = (ctx->noise_sum_squares - (ctx->noise_sum * ctx->noise_sum)/BLOCK_SIZE ); 
         float std_noise_reciprocol  = sqrtf( (BLOCK_SIZE-1.0f)/sum_noise_square );
        
-        if(!isnan(std_noise_reciprocol) && !isnan(mean_signal))
+        if(sum_noise_square > 0 && !isnan(std_noise_reciprocol) && !isnan(mean_signal))
         {
             smoother_process_point(&(ctx->smoother), mean_signal, std_noise_reciprocol);
             
@@ -63,10 +63,10 @@ char undistorter_process_sample(struct undistorter_ctx* ctx, float x, float* y)
                 
                 integral_min = smoother_evaluate_integral(&(ctx->integral), ctx->signal_min);
                 integral_max = smoother_evaluate_integral(&(ctx->integral), ctx->signal_max);
-            
+
                 ctx->offset = ctx->signal_min - integral_min;
                 ctx->scale  = (ctx->signal_max - ctx->signal_min) / (integral_max-integral_min);
-                
+
                 ctx->blocks_since_recompensation = 0;
             }
             
