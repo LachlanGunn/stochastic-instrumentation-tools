@@ -37,7 +37,7 @@ void smoother_init(struct smoother_ctx* ctx, float min, float max, float time_co
     ctx->min_value = min;
     ctx->max_value = max;
     
-    ctx->decay_constant = expf(1.0f/time_constant);
+    ctx->decay_constant = expf(-1.0f/time_constant);
     
     for(i = 0; i < SMOOTHER_POINTS; i++)
     {
@@ -75,8 +75,8 @@ void smoother_process_point(struct smoother_ctx* ctx, float x, float y)
      * weight.
      */
     
-    weight_0 = 1 - idx_fractional;
-    weight_1 =     idx_fractional;
+    weight_0 = (1 - idx_fractional)*(1-ctx->decay_constant);
+    weight_1 = (    idx_fractional)*(1-ctx->decay_constant);
     
     /* Add to the weighted average. */
     ctx->weights[idx_integer] *= ctx->decay_constant;
@@ -150,7 +150,7 @@ void smoother_create_integral(struct smoother_integrated_ctx* ctx_int, struct sm
      */
     ctx_int->interp_c0[0] = 0.0f;
     
-    for(i = 0; i < ctx->N; i++)
+    for(i = 1; i < ctx->N; i++)
     {
         width = (ctx->max_value - ctx->min_value)/(ctx->N - 1);
         
@@ -221,7 +221,6 @@ float smoother_evaluate_integral(struct smoother_integrated_ctx* ctx_int, float 
         
     /* Now evaluate the integral.  First the "whole" part. */
     integral_value = ctx_int->interp_c0[idx_integer];
-
     
     /*
      * We have computed coefficients for the quadratics
