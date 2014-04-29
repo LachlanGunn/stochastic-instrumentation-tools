@@ -16,7 +16,7 @@ int main(int argc, char** argv)
     clock_t start_time;
     clock_t end_time;
    
-    undistorter_init(&ctx, 0.1, 2, 1, 0.0f, 5.0f, 25.0f);
+    undistorter_init(&ctx, 0.1, 2, 4, 1, 0.0f, 5.0f, 25.0f);
     
     fh = fopen("C:\\tmp\\test.dat", "r");
     
@@ -55,7 +55,7 @@ int main(int argc, char** argv)
     start_time = clock();
     for(i = 250000; i < sample_count; i++)
     {
-        undistorter_process_sample(&ctx, input_samples[i], &input_samples[i]);
+        input_samples[i] = undistorter_compensate_sample(&ctx, input_samples[i]);
     }
     end_time = clock();
     printf("Elapsed time: %f\n", ((float)(end_time-start_time))/CLOCKS_PER_SEC);

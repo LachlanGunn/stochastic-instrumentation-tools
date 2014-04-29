@@ -236,3 +236,20 @@ float smoother_evaluate_integral(struct smoother_integrated_ctx* ctx_int, float 
     
     return integral_value;
 }
+
+void smoother_create_integral_lookup(struct smoother_integrated_ctx* ctx_int, float* table, int N, int start, int count)
+{
+    int i;
+    float this_value;
+    float increment;
+    
+    increment  = (ctx_int->max_value - ctx_int->min_value)/N;
+    this_value = ctx_int->min_value + increment*start;
+    
+    for(i = 0; i < count; i++)
+    {
+        table[i+start] = smoother_evaluate_integral(ctx_int, this_value);
+    
+        this_value += increment;
+    }
+}

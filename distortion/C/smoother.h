@@ -80,5 +80,16 @@ extern void smoother_create_integral(struct smoother_integrated_ctx* ctx_int, st
  * @return The estimated indefinite integral.
  */
 extern float smoother_evaluate_integral(struct smoother_integrated_ctx* ctx_int, float x);
+
+/**
+ * Produce a lookup table for the indefinite integral.
+ *
+ * @param ctx_int   The integrated smoother to process.
+ * @param table     The array to populate.
+ * @param N         The number of elements in the lookup table.
+ * @param start     The first element to compute.
+ * @param count     The number of elements to compute.
+ */
+ extern void smoother_create_integral_lookup(struct smoother_integrated_ctx* ctx_int, float* table, int N, int start, int count);
  
 #endif /* __SMOOTHER_H */
